@@ -10,7 +10,10 @@
     }}
     <ul class="hypersearch-results">
       {{#each results as |result|}}
-        <li class="hypersearch-result {{if result.isHighlighted 'highlight'}}">
+        <li
+          class="hypersearch-result {{if result.isHighlighted 'highlight'}}"
+          {{action "highlightResult" result on="mouseEnter"}}
+        >
           <span {{action "selectResult" result on="click"}}>
             {{#if resultKey}}
               {{get result resultKey}}

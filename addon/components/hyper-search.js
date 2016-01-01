@@ -120,14 +120,7 @@ export default Component.extend({
     }
   },
 
-  _setHighlightedResult(index) {
-    if (index === null) return;
-
-    let result = get(this, 'results').objectAt(index);
-    set(result, 'isHighlighted', true);
-  },
-
-  _getNextIndex(increment) {
+  _getNext(increment) {
     let results  = get(this, 'results');
     let maxIndex = get(results, 'length') - 1;
     if (maxIndex === -1) return null;
@@ -139,11 +132,23 @@ export default Component.extend({
       if (!get(result, 'isHighlighted')) return false;
 
       nextIndex = i === limit ? null : i + increment;
+      return true;
+    });
+
+    return results.objectAt(nextIndex);
+  },
+
+  highlightResult(resultToHighlight) {
+    if (!resultToHighlight) return;
+
+    get(this, 'results').any((result, i) => {
+      if (!get(result, 'isHighlighted')) return false;
+
       set(result, 'isHighlighted', false);
       return true;
     });
 
-    return nextIndex;
+    set(resultToHighlight, 'isHighlighted', true);
   },
 
   actions: {
@@ -155,8 +160,12 @@ export default Component.extend({
       this._handleAction('selectResult', result);
     },
 
+    highlightResult(result) {
+      this.highlightResult(result);
+    },
+
     moveHighlightedResult(increment) {
-      this._setHighlightedResult(this._getNextIndex(increment));
+      this.highlightResult(this._getNext(increment));
     },
   },
 });
