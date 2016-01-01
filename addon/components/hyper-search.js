@@ -120,6 +120,32 @@ export default Component.extend({
     }
   },
 
+  _setHighlightedResult(index) {
+    if (index === null) return;
+
+    let result = get(this, 'results').objectAt(index);
+    set(result, 'isHighlighted', true);
+  },
+
+  _getNextIndex(increment) {
+    let results  = get(this, 'results');
+    let maxIndex = get(results, 'length') - 1;
+    if (maxIndex === -1) return null;
+
+    let nextIndex = increment === 1 ? 0 : maxIndex;
+    let limit     = increment === 1 ? maxIndex : 0;
+
+    results.any((result, i) => {
+      if (!get(result, 'isHighlighted')) return false;
+
+      nextIndex = i === limit ? null : i + increment;
+      set(result, 'isHighlighted', false);
+      return true;
+    });
+
+    return nextIndex;
+  },
+
   actions: {
     search(_event, query) {
       debounce(this, '_search', query, get(this, 'debounceRate'), true);
@@ -127,6 +153,10 @@ export default Component.extend({
 
     selectResult(result) {
       this._handleAction('selectResult', result);
-    }
-  }
+    },
+
+    moveHighlightedResult(increment) {
+      this._setHighlightedResult(this._getNextIndex(increment));
+    },
+  },
 });
