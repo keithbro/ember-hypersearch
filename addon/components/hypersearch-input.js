@@ -1,4 +1,3 @@
-import Ember from 'ember';
 import OneWayInput from 'ember-one-way-input/components/one-way-input';
 
 export default OneWayInput.extend({
@@ -8,6 +7,6 @@ export default OneWayInput.extend({
 
   KEY_EVENTS: {
     '38': 'onuparrow',
-    '40': 'ondownarrow',
-  },
+    '40': 'ondownarrow'
+  }
 });

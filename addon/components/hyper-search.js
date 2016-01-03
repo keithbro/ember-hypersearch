@@ -123,13 +123,17 @@ export default Component.extend({
   _getNext(increment) {
     let results  = get(this, 'results');
     let maxIndex = get(results, 'length') - 1;
-    if (maxIndex === -1) return null;
+    if (maxIndex === -1) {
+      return null;
+    }
 
     let nextIndex = increment === 1 ? 0 : maxIndex;
     let limit     = increment === 1 ? maxIndex : 0;
 
     results.any((result, i) => {
-      if (!get(result, 'isHighlighted')) return false;
+      if (!get(result, 'isHighlighted')) {
+        return false;
+      }
 
       nextIndex = i === limit ? null : i + increment;
       return true;
@@ -139,13 +143,15 @@ export default Component.extend({
   },
 
   highlightResult(resultToHighlight) {
-    if (!resultToHighlight) return;
+    if (!resultToHighlight) {
+      return;
+    }
 
-    get(this, 'results').any((result, i) => {
-      if (!get(result, 'isHighlighted')) return false;
-
-      set(result, 'isHighlighted', false);
-      return true;
+    get(this, 'results').any(result => {
+      if (get(result, 'isHighlighted')) {
+        set(result, 'isHighlighted', false);
+        return true;
+      }
     });
 
     set(resultToHighlight, 'isHighlighted', true);
