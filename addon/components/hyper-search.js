@@ -131,12 +131,10 @@ export default Component.extend({
     let limit     = increment === 1 ? maxIndex : 0;
 
     results.any((result, i) => {
-      if (!get(result, 'isHighlighted')) {
-        return false;
+      if (get(result, 'isHighlighted')) {
+        nextIndex = i === limit ? null : i + increment;
+        return true;
       }
-
-      nextIndex = i === limit ? null : i + increment;
-      return true;
     });
 
     return results.objectAt(nextIndex);
@@ -147,7 +145,7 @@ export default Component.extend({
       return;
     }
 
-    get(this, 'results').any(result => {
+    get(this, 'results').any((result) => {
       if (get(result, 'isHighlighted')) {
         set(result, 'isHighlighted', false);
         return true;
@@ -172,6 +170,6 @@ export default Component.extend({
 
     moveHighlightedResult(increment) {
       this.highlightResult(this._getNext(increment));
-    },
-  },
+    }
+  }
 });
